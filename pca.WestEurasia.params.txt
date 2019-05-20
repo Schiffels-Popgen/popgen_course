@@ -1,0 +1,9 @@
+genotypename: /data/pca/genotypes_small.geno
+snpname: /data/pca/genotypes_small.snp
+indivname: /data/pca/genotypes_small.ind
+evecoutname: pca.WestEurasia.evec
+evaloutname: pca.WestEurasia.eval
+poplistname: /data/pca/WestEurasia.poplist.txt
+lsqproject: YES
+numoutevec: 4
+numthreads: 1
