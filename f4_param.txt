@@ -1,0 +1,5 @@
+genotypename:   /data/popgen_course/genotypes_small.geno
+snpname:        /data/popgen_course/genotypes_small.snp
+indivname:      /data/popgen_course/genotypes_small.ind
+popfilename:    f4_popfile.txt
+f4mode: YES
