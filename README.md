@@ -11,7 +11,7 @@ Having said that, for someone reasonably experienced with Unix, it is possible t
 
 1. Install [Jupyter](https://jupyter.org) notebooks with [Bash extension](https://github.com/takluyver/bash_kernel). You will also need [Eigensoft](https://github.com/DReichLab/EIG) and [ADMIXTOOLS](https://github.com/DReichLab/AdmixTools).
 2. Clone this repository in your home directory running `git clone https://github.com/stschiff/popgen_course.git`
-3. Download the genotype data needed for these exercises from [here](). In my notebooks, I assume that this data has been downloaded into the directory `/data/popgen_course`.
+3. Download the genotype data needed for these exercises from [here](https://oc.gnz.mpg.de/owncloud/index.php/s/dT9KzFhLfunk3Tb). In my notebooks, I assume that this data has been downloaded into the directory `/data/popgen_course`.
 
 Having Jupyter installed, you can now simply open the Notebooks directly from within Jupyter, or you can access static versions of them here:
 

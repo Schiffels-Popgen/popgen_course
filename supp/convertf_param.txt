@@ -1,0 +1,8 @@
+genotypename:    /Users/schiffels/Data/workshop_dataset_prep/HumanOrigins_FennoScandian.geno
+snpname:         /Users/schiffels/Data/workshop_dataset_prep/HumanOrigins_FennoScandian.snp
+indivname:       /Users/schiffels/Data/workshop_dataset_prep/HumanOrigins_FennoScandian.ind
+outputformat:    EIGENSTRAT
+genotypeoutname: /Users/schiffels/Data/workshop_dataset_prep/HumanOrigins_FennoScandian_small.geno
+snpoutname:      /Users/schiffels/Data/workshop_dataset_prep/HumanOrigins_FennoScandian_small.snp
+indivoutname:    /Users/schiffels/Data/workshop_dataset_prep/HumanOrigins_FennoScandian_small.ind
+poplistname:     poplist.txt
