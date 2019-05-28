@@ -10,6 +10,3 @@ scp sdag:$D.snp $OUT/HumanOrigins_FennoScandian.snp
 # Extract smaller dataset
 convertf -p convertf_param.txt
 
-# Copy PCA poplists into Data folder
-cp WestEurasia.poplist.txt $OUT/
-cp AllEurasia.poplist.txt $OUT/
