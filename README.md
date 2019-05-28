@@ -19,6 +19,5 @@ Having Jupyter installed, you can now simply open the Notebooks directly from wi
 2. [Getting Started (Python)](https://nbviewer.jupyter.org/github/stschiff/popgen_course/blob/master/02_pynb_getting_started.ipynb)
 3. [Principal Components Analysis (Bash)](https://nbviewer.jupyter.org/github/stschiff/popgen_course/blob/master/03_bashnb_smartpca.ipynb)
 4. [Principal Components Analysis (Python)](https://nbviewer.jupyter.org/github/stschiff/popgen_course/blob/master/04_pynb_plotting_pca.ipynb)
-
-
+5. [F Statistics (Python)](https://nbviewer.jupyter.org/github/stschiff/popgen_course/blob/master/05_pynb_fstatistics.ipynb)
 
