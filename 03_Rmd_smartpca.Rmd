@@ -5,6 +5,10 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r}
+library(magrittr)
+```
+
 Principal components analysis (PCA) is one of the most useful techniques to visualise genetic diversity in a dataset. The methodology is not restricted to genetic data, but in general allows breaking down high-dimensional datasets to two or more dimensions for visualisation in a two-dimensional space.
 
 ## Genotype Data
@@ -32,7 +36,11 @@ individuals <- readr::read_delim(
    "data/popgen_course/HumanOrigins_FennoScandian_small.ind", 
    delim = " ", 
    trim_ws = T,
-   col_names = c("name", "sex", "population")
+   col_names = c(
+      "name", 
+      "sex", 
+      "population"
+   )
 )
 
 individuals %>% head(20)
@@ -40,15 +48,59 @@ individuals %>% head(20)
 
 And here the first 20 SNP rows:
 
+```{r}
+snps <- readr::read_delim(
+   "data/popgen_course/HumanOrigins_FennoScandian_small.snp", 
+   delim = " ", 
+   trim_ws = T,
+   col_names = c(
+      "SNP_name", 
+      "chromosome", 
+      "genetic_position", 
+      "physical_position", 
+      "reference_allele", 
+      "alternative_allele"
+   )
+)
+```
+
 And here are the first 20 genotypes of the first 50 individuals:
+
+```{r}
+geno <- readr::read_lines(
+   "data/popgen_course/HumanOrigins_FennoScandian_small.geno",
+   n_max = 20
+)
+
+geno %>% substr(1, 50)
+```
 
 Counting how many individuals and SNPs there are:
 
+```{r}
+nrow(individuals)
+nrow(snps)
+```
+
 And now we check that the first row of the `*.geno` file indeed contains the same number of columns:
 
-which is one more, including the newline character at the end of the line. Now counting the number of rows in the `*.geno`-file (this takes a few seconds, as the file is several hundred MB large):
+```{r}
+nchar(geno[1])
+```
+
+Now counting the number of rows in the `*.geno`-file (this takes a few seconds, as the file is several hundred MB large):
+
+```{r}
+R.utils::countLines("data/popgen_course/HumanOrigins_FennoScandian_small.geno")
+```
 
 Great, the number of rows and columns agrees with the numbers indicated in the `*.ind` and `*.snp` file! Now we're counting how many different populations there are. Let's first see the first 10 populations in the sorted list, alongside the number of individuals in each group:
+
+```{r}
+individuals %>% 
+   dplyr::group_by(population) %>%
+   dplyr::count()
+```
 
 ## How PCA works
 
