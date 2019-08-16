@@ -5,6 +5,10 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r, echo=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+```
+
 ```{r}
 library(magrittr)
 ```
@@ -23,7 +27,7 @@ The data is laid out as a matrix, with columns indicating individuals, and rows 
 
 In the following, we will explore the files using R in this Rmarkdown document.
 
-The data that we want to analyse is stored at `/data/popgen_course`. Let's list the contents of that directory:
+The data that we want to analyse is stored at `data/popgen_course`. Let's list the contents of that directory:
 
 ```{r}
 list.files("data/popgen_course/")
@@ -33,7 +37,7 @@ Let's explore those files a bit. Here are the first 20 individuals:
 
 ```{r}
 individuals <- readr::read_delim(
-   "data/popgen_course/HumanOrigins_FennoScandian_small.ind", 
+   "data/popgen_course/genotypes_small.ind", 
    delim = " ", 
    trim_ws = T,
    col_names = c(
@@ -50,7 +54,7 @@ And here the first 20 SNP rows:
 
 ```{r}
 snps <- readr::read_delim(
-   "data/popgen_course/HumanOrigins_FennoScandian_small.snp", 
+   "data/popgen_course/genotypes_small.snp", 
    delim = " ", 
    trim_ws = T,
    col_names = c(
@@ -68,7 +72,7 @@ And here are the first 20 genotypes of the first 50 individuals:
 
 ```{r}
 geno <- readr::read_lines(
-   "data/popgen_course/HumanOrigins_FennoScandian_small.geno",
+   "data/popgen_course/genotypes_small.geno",
    n_max = 20
 )
 
@@ -91,7 +95,7 @@ nchar(geno[1])
 Now counting the number of rows in the `*.geno`-file (this takes a few seconds, as the file is several hundred MB large):
 
 ```{r}
-R.utils::countLines("data/popgen_course/HumanOrigins_FennoScandian_small.geno")
+R.utils::countLines("data/popgen_course/genotypes_small.geno") %>% as.integer()
 ```
 
 Great, the number of rows and columns agrees with the numbers indicated in the `*.ind` and `*.snp` file! Now we're counting how many different populations there are. Let's first see the first 10 populations in the sorted list, alongside the number of individuals in each group:
@@ -109,15 +113,15 @@ To understand how PCA works, consider a single individual and its representation
 For actually running the analysis, we use a software called `smartPCA` from the [Eigensoft package](https://github.com/DReichLab/EIG). As many other tools from this and related packages, `smartPCA` reads in a parameter file which specifies its input and output files and options. In our case, we want the parameter file to have the following content:
 
 ```
-genotypename: /data/popgen_course/genotypes_small.geno
-snpname: /data/popgen_course/genotypes_small.snp
-indivname: /data/popgen_course/genotypes_small.ind
+genotypename: data/popgen_course/genotypes_small.geno
+snpname: data/popgen_course/genotypes_small.snp
+indivname: data/popgen_course/genotypes_small.ind
 evecoutname: pca.WestEurasia.evec
 evaloutname: pca.WestEurasia.eval
-poplistname: /data/popgen_course/WestEurasia.poplist.txt
+poplistname: data/popgen_course/WestEurasia.poplist.txt
 lsqproject: YES
 numoutevec: 4
-numthreads: 1"
+numthreads: 1
 ```
 
 Here, the first three parameters specify the input genotype files. The next two rows specify two output file names, typically with ending `*.evec` and `*.eval`. The parameter line beginning with `poplistname` contains a file with a list of populations used for calculating the principal components (see below). The option `lsqproject` is important for applications including ancient DNA with lots of missing data, which I will not elaborate on. For the purpose of this workshop, you should use `lsqproject: YES`. The next option `numoutevec` specifies the number of principal components that we compute, the last option `numthreads` the number of CPUs to use for this run. We use just one since we're working together on the same computer, so cannot afford everyone running on lots of CPUs.
@@ -131,8 +135,8 @@ So what happens to individuals that are not in populations listed in the populat
 For this workshop, I prepared two population lists::
 
 ```
-/data/popgen_course/WestEurasia.poplist.txt
-/data/popgen_course/AllEurasia.poplist.txt
+data/popgen_course/WestEurasia.poplist.txt
+data/popgen_course/AllEurasia.poplist.txt
 ```
 
 As you can tell from the names of the files, they specify two sets of modern populations representing West Eurasia or all of Europe and Asia, respectively.
@@ -141,22 +145,64 @@ I recommend to look through both of the population lists and google some populat
 
 ## Running `smartPCA`
 
-Now go ahead and open a new text file using your Jupyter Browser, you can name it anything you like. For the sake of a concrete name, let's call it `pca.WestEurasia.params.txt`. Text files in Jupyter are opene in a text editor, so you can then simply copy-paste the above lines into the new file.
+Now go ahead and open a new text file using your Jupyter Browser, you can name it anything you like. For the sake of a concrete name, let's call it `pca.WestEurasia.params.txt`. Text files in Jupyter are opened in a text editor, so you can then simply copy-paste the above lines into the new file.
+
+```{r}
+readr::write_lines(c(
+      "genotypename: data/popgen_course/genotypes_small.geno",
+      "snpname: data/popgen_course/genotypes_small.snp",
+      "indivname: data/popgen_course/genotypes_small.ind",
+      "evecoutname: pca.WestEurasia.evec",
+      "evaloutname: pca.WestEurasia.eval",
+      "poplistname: data/popgen_course/WestEurasia.poplist.txt",
+      "lsqproject: YES",
+      "numoutevec: 4",
+      "numthreads: 1"
+   ),
+   path = "pca.WestEurasia.params.txt"
+)
+```
 
 Let's see whether it worked, by printing out the contents of that file into your notebook:
+
+```{r}
+readr::read_lines(
+   "pca.WestEurasia.params.txt"
+)
+```
 
 Great, so that's our parameter file for running `smartPCA`.
 
 **Note:** that we specified two output files in our parameter file, here called `pca.WestEurasia.evec` and `pca.WestEurasia.eval`. You can actually put any names you want in there. But beware of relative vs. absolute paths. File names starting with `/` are considered \"absolute\", that is, taken to go from the root of the file system. In contrast, filenames not starting with `/` are considered \"relative\" to the current working directory. If you forgot which directory you're in, run `pwd`.
 
-**Note:** The option `poplistname` is a crucial one. Here you need to specify which populations are used to compute the eigenvectors of the principal components analysis. In our case, I have prepared two population list files: `/data/popgen_course/WestEurasia.poplist.txt` and `/data/popgen_course/AllEurasia.poplist.txt`. Pick one of the two to carry on.
+**Note:** The option `poplistname` is a crucial one. Here you need to specify which populations are used to compute the eigenvectors of the principal components analysis. In our case, I have prepared two population list files: `data/popgen_course/WestEurasia.poplist.txt` and `data/popgen_course/AllEurasia.poplist.txt`. Pick one of the two to carry on.
 
-Good, now we can run `smartPCA`. To do that, it's more convenient to use the terminal than a Notebook. So open a terminal and run
+Good, now we can run `smartPCA`. To do that, it's more convenient to use the terminal than a Rmarkdown file. So open a terminal and run
 
-This will typically run for about 30 minutes and output lots of logging output to the screen."
+```
+smartpca -p pca.WestEurasia.params.txt
+```
+
+This will typically run for about 30 minutes and output lots of logging output to the screen.
 
 In a similar manner we can prepare a parameter file for the AllEurasia population list. This is how it should look:
 
+```
+genotypename: data/popgen_course/genotypes_small.geno
+snpname: data/popgen_course/genotypes_small.snp
+indivname: data/popgen_course/genotypes_small.ind
+evecoutname: pca.AllEurasia.evec
+evaloutname: pca.AllEurasia.eval
+poplistname: data/popgen_course/AllEurasia.poplist.txt
+lsqproject: YES
+numoutevec: 4
+numthreads: 1
+```
+
 And similar to the command above, we can run pca on the AllEurasia population list via:
+
+```
+smartpca -p pca.AllEurasia.params.txt
+```
 
 which will run slightly longer than the first one because there are more populations.
