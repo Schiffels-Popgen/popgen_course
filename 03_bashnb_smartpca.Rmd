@@ -1,6 +1,8 @@
 ---
 title: "Principal Components Analysis (PCA)"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 Principal components analysis (PCA) is one of the most useful techniques to visualise genetic diversity in a dataset. The methodology is not restricted to genetic data, but in general allows breaking down high-dimensional datasets to two or more dimensions for visualisation in a two-dimensional space.
@@ -15,16 +17,26 @@ The data is laid out as a matrix, with columns indicating individuals, and rows 
 * `*.ind`: The file containing the names of the individuals. It consists of three columns: Individual Name, Sex (encoded as M(ale), F(emale), or U(nknown)), and population name.
 * `*.geno`: The file containing the genotype matrix, with individuals laid out from left to right, and SNP positions laid out from top to bottom.
 
-In the following, we will explore the files using bash in this notebook.
+In the following, we will explore the files using R in this Rmarkdown document.
 
 The data that we want to analyse is stored at `/data/popgen_course`. Let's list the contents of that directory:
 
 ```{r}
-list.files("d")
+list.files("data/popgen_course/")
 ```
 
 Let's explore those files a bit. Here are the first 20 individuals:
 
+```{r}
+individuals <- readr::read_delim(
+   "data/popgen_course/HumanOrigins_FennoScandian_small.ind", 
+   delim = " ", 
+   trim_ws = T,
+   col_names = c("name", "sex", "population")
+)
+
+individuals %>% head(20)
+```
 
 And here the first 20 SNP rows:
 
