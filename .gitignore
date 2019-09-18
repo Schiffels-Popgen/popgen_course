@@ -5,3 +5,6 @@
 
 # data
 data/*
+
+# R
+.Rhistory
