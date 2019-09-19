@@ -271,3 +271,135 @@ d %>%
 
 As expected, the ancient samples and modern Saami are the ones with the highest allele sharing with present-day East Asians (as represented by Han) compared to many other Europeans.
 
+## Outgroup F3 Statistics Scatter plot
+
+The above plot shows an intriguing cline of differential relatedness to Han in many Europeans. For example, would you have guessed that Icelandics are closer to Han than Armenians are to Han? This is very surprising, and it shows that European ancestry has a complex relationship to East Asians. To understand this better, you can read [Patterson 2012](http://www.genetics.org/content/early/2012/09/06/genetics.112.145037), who makes some intriguing observations. Patterson and colleagues use Admixture F3 statistics and apply it to many populations world-wide. They summarise some population triples with the most negative F3 statistics in the following table:
+
+<img src="img/Patterson_2012_table.png" alt="Patterson 2012 table" style="width: 450px;"/>
+
+There are many interesting results here, but one of the most striking one is the finding of F3(Sardinian, Karitiana; French), which is highly significantly negative. This statistics implies that French are admixed between Sardinians and Karitiana, a Native American population from Brazil. How is that possible? We can of course rule out any recent Native American backflow into Europe.
+
+Patterson and colleagues explained this finding with hypothesising an ancient admixture event, from a Siberian population that contributed to both Europeans and to Native Americans. They termed that population the “Ancient North Eurasians (ANE)”. The following admixture graph was suggested:
+
+<img src="img/Patterson_2012_ANEfig.png" alt="Patterson 2012 ANE graph" style="width: 600px;"/>
+
+As you can see, the idea is that modern Central Europeans, such as French, are admixed between Southern Europeans (Sardinians) and ANE. The Ancient North Eurasians are a classic example for a “Ghost” population, a population which does not exist anymore in unmixed form, and from which we have no direct individual representative.
+
+Amazingly, two years after the publication of [Patterson 2012](http://www.genetics.org/content/early/2012/09/06/genetics.112.145037), the ANE ghost population was actually found: [Raghavan et al.](https://www.nature.com/articles/nature12736) and colleagues, in 2014, published a paper called “Upper Palaeolithic Siberian genome reveals dual ancestry of Native Americans”. A 24,000 year old boy (called MA1) from the site of “Mal’ta” in Siberia was shown to have close genetic affinity with both Europeans and in particular Native Americans, just as proposed in [Patterson 2012](http://www.genetics.org/content/early/2012/09/06/genetics.112.145037).
+
+The affinities are summarised nicely in this figure from [Raghavan et al.](https://www.nature.com/articles/nature12736):
+
+<img src="img/MA1_affinities.png" alt="MA1 Affinities" style="width: 600px;"/>
+
+OK, so we now know that ancestry related to Native Americans contributed to European countries. Could that possibly explain the affinity of our ancient samples and Saami to Han Chinese in some way? To test this, we will run the same Outgroup F3 statistics as above, but this time not with Han but with MA1 as test population. Specifically, we run the following population triples in `qp3Pop`:
+
+```
+MA1_HG.SG Chuvash Mbuti
+MA1_HG.SG Albanian Mbuti
+MA1_HG.SG Armenian Mbuti
+MA1_HG.SG Bulgarian Mbuti
+MA1_HG.SG Czech Mbuti
+MA1_HG.SG Druze Mbuti
+MA1_HG.SG English Mbuti
+MA1_HG.SG Estonian Mbuti
+MA1_HG.SG Finnish Mbuti
+MA1_HG.SG French Mbuti
+MA1_HG.SG Georgian Mbuti
+MA1_HG.SG Greek Mbuti
+MA1_HG.SG Hungarian Mbuti
+MA1_HG.SG Icelandic Mbuti
+MA1_HG.SG Italian_North Mbuti
+MA1_HG.SG Italian_South Mbuti
+MA1_HG.SG Lithuanian Mbuti
+MA1_HG.SG Maltese Mbuti
+MA1_HG.SG Mordovian Mbuti
+MA1_HG.SG Norwegian Mbuti
+MA1_HG.SG Orcadian Mbuti
+MA1_HG.SG Russian Mbuti
+MA1_HG.SG Sardinian Mbuti
+MA1_HG.SG Scottish Mbuti
+MA1_HG.SG Sicilian Mbuti
+MA1_HG.SG Spanish_North Mbuti
+MA1_HG.SG Spanish Mbuti
+MA1_HG.SG Ukrainian Mbuti
+MA1_HG.SG Levanluhta Mbuti
+MA1_HG.SG BolshoyOleniOstrov Mbuti
+MA1_HG.SG ChalmnyVarre Mbuti
+MA1_HG.SG Saami.DG Mbuti
+```
+
+here, `MA1_HG.SG` is the somewhat cryptic population name for the MA1-individual.
+
+**Exercise:** Follow the same protocol as above: Copy the list into a file, prepare a parameter file for `qp3Pop` with that population triple list, and run `qp3Pop`. Copy the results (all lines beginning with “results:”) into a file, named "f3_outgroup_stats_MA1.txt"
+
+To test in what way the relationship to Han Chinese is correlated with the relationship with MA1, we will now plot the two statistics against each other in a scatter plot. We first have to merge the two outgroup-F3 datasets together. Here is the code including loading (assuming that the two F3 dataframes are called `outgroupf3dat_Han` and `outgroupf3dat_MA1`):
+
+```{r}
+outgroupf3dat_Han <- readr::read_delim(
+  "f3_outgroup_stats_Han.txt", 
+  delim = " ",
+  trim_ws = T,
+  col_names = c("dummy", "A", "B", "C", "F3", "stderr", "Z", "nSNPs")
+)
+
+outgroupf3dat_MA1 <- readr::read_delim(
+  "f3_outgroup_stats_MA1.txt", 
+  delim = " ",
+  trim_ws = T,
+  col_names = c("dummy", "A", "B", "C", "F3", "stderr", "Z", "nSNPs")
+)
+
+outgroupf3dat_merged <- dplyr::full_join(
+  outgroupf3dat_Han,
+  outgroupf3dat_MA1,
+  by = "B",
+  suffix = c("_Han", "_MA1")
+)
+```
+
+Again, we check that everything worked:
+
+```{r}
+outgroupf3dat_merged
+```
+
+Now we can make a scatter plot:
+
+```{r}
+outgroupf3dat_merged %>%
+  ggplot() +
+  geom_point(
+    aes(
+      x = F3_Han, 
+      y = F3_MA1
+    )
+  ) +
+  xlab("F3(Test, Han; Mbuti)") +
+  ylab("F3(Test, MA1; Mbuti)")
+```
+
+This isn’t very useful, however, as we cannot see which point is which population. We use geom_label_repel function from matplotlib to add text labels to each point:
+
+```{r}
+outgroupf3dat_merged %>%
+  ggplot() +
+  geom_point(
+    aes(
+      x = F3_Han, 
+      y = F3_MA1
+    )
+  ) +
+  xlab("F3(Test, Han; Mbuti)") +
+  ylab("F3(Test, MA1; Mbuti)") +
+  ggrepel::geom_label_repel(
+    aes(
+      x = F3_Han, 
+      y = F3_MA1,
+      label = B
+    )
+  )
+```
+
+The result shows that indeed the affinity to East Asians in the bulk of European contries can be explained by MA1-related ancestry. Most European countries have a linear relationship between their affinity to Han and their affinity to MA1. However, this is not true for our ancient samples from Fennoscandia and for modern Saami and Chuvash, who have extra affinity to Han not explained by MA1 ([Lazaridis et al. 2014](https://www.nature.com/articles/nature13673)).
+
+Now, why there is a connection between MA1 and Han is not trivial to explain. The most probable explanation involves "Basal Eurasian" ancestry, which happens to be anti-correlated to MA1-ancestry in Europe, and which drives those populations with high "Basal Eurasian" ancestry further away from Han. See [Lazaridis et al. 2014](https://www.nature.com/articles/nature13673) for more details.
