@@ -378,7 +378,7 @@ outgroupf3dat_merged %>%
   ylab("F3(Test, MA1; Mbuti)")
 ```
 
-This isn’t very useful, however, as we cannot see which point is which population. We use geom_label_repel function from matplotlib to add text labels to each point:
+This isn’t very useful, however, as we cannot see which point is which population. We use the `geom_label_repel` function from ggrepel to add text labels to each point:
 
 ```{r}
 outgroupf3dat_merged %>%
