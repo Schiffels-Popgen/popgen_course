@@ -1,1 +1,10 @@
 .ipynb_checkpoints/
+
+# rendered documents
+*.html
+
+# data
+data/*
+
+# R
+.Rhistory
