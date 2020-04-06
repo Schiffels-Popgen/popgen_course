@@ -9,12 +9,12 @@ This repository contains several Jupyter Notebooks that I have used in the past 
 2. Clone this repository in your home directory running `git clone https://github.com/stschiff/popgen_course.git`
 3. Download the genotype data needed for these exercises from [here](https://shh-cloud.gnz.mpg.de/index.php/s/K3dBtrCgpSxS4jN). In my notebooks, I assume that this data has been downloaded into the directory `/data/popgen_course`.
 
-Having Jupyter installed, you can now simply open the Notebooks directly from within Jupyter, or you can access static versions of them here:
+Having Jupyter installed, you can now simply open the Notebooks directly from within Jupyter, or you can simply open them directly on github, which will render them nicely as static HTML pages. The chapters are:
 
-1. [Getting Started (Bash)](https://nbviewer.jupyter.org/github/stschiff/popgen_course/blob/master/01_bashnb_getting_started.ipynb)
-2. [Getting Started (Python)](https://nbviewer.jupyter.org/github/stschiff/popgen_course/blob/master/02_pynb_getting_started.ipynb)
-3. [Principal Components Analysis (Bash)](https://nbviewer.jupyter.org/github/stschiff/popgen_course/blob/master/03_bashnb_smartpca.ipynb)
-4. [Principal Components Analysis (Python)](https://nbviewer.jupyter.org/github/stschiff/popgen_course/blob/master/04_pynb_plotting_pca.ipynb)
-5. [F Statistics (Python)](https://nbviewer.jupyter.org/github/stschiff/popgen_course/blob/master/05_pynb_fstatistics.ipynb)
+1. Getting Started (Bash)
+2. Getting Started (Python)
+3. Principal Components Analysis (Bash)
+4. Principal Components Analysis (Python)
+5. F Statistics (Python)
 
 In addition to these 5 notebooks, some of the lessons have been kindly translated to R Markdown by [@nevrome](https://github.com/nevrome), in case you would like to see how it's done in R! 
